@@ -1,38 +1,49 @@
 [user]
 	name = Sylvain Rabot
 	email = sylvain@abstraction.fr
-        signingkey = "6EF77C66F87F0253ADD7857B13D27DFB503A8D91"
+	signingkey = 6EF77C66F87F0253ADD7857B13D27DFB503A8D91
 [commit]
 	gpgsign = true
+	verbose = true
 [tag]
 	gpgSign = true
+	sort = -v:refname
 [diff]
 	noprefix = True
 	algorithm = histogram
+	tool = difftastic
+	external = difft
 [core]
 	pager = delta
+	excludesfile = /Users/sylvain/.gitignore
+	fsmonitor = false
 [push]
 	default = current
+	autoSetupRemote = true
 [alias]
 	st = status
 	graph = log --oneline --graph --pretty=\"format:%C(yellow)%h%C(reset)%C(auto)%d %C(reset)%s %C(green)%aN %C(cyan)%cr%C(reset)\"
 	graph-abs = log --oneline --graph --pretty=\"format:%C(yellow)%h%C(reset)%C(auto)%d %C(reset)%s %C(green)%aN %C(cyan)%ci%C(reset)\"
 	diff = diff --relative
 	fixup = commit --amend --no-edit
-	betclic = !git config --local user.email "s.rabot@betclicgroup.com" && git config --local user.signingkey "0CD778CA502150098AB01A0F0189BC521B91C2FD" 
 	cleanup = !git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d
-
 [merge]
-	tool = meld
+	tool = merge
 [mergetool "meld"]
-	path = /usr/local/bin/meld
+	path = /opt/homebrew/bin/meld
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+	difftool = true
 [delta]
 	relative-paths                = true
 	features                      = decorations
 	minus-style                   = red
 	minus-non-emph-style          = red
-    	minus-emph-style              = reverse red
-    	minus-empty-line-marker-style = normal "#3f0001"
+	minus-emph-style              = reverse red
+	minus-empty-line-marker-style = normal "#3f0001"
 	plus-style                    = green
 	plus-non-emph-style           = green
 	plus-emph-style               = reverse green
@@ -45,3 +56,20 @@
 	file-decoration-style = yellow
 [pull]
 	rebase = false
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[rerere]
+	enabled = true
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[fetch]
+	showForcedUpdates = true
+[protocol "file"]
+	allow = always
